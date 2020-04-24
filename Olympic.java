@@ -41,6 +41,8 @@ public class Olympic {
         dropUser_UID(connection, "5");
         createEvent(connection,"1","1","10-AUG-2016 18:01","1");
         */
+        addEventOutCome(connection, "1","2","1","14","2");
+
 
 
     }
@@ -135,6 +137,29 @@ public class Olympic {
      }
     }
 
+    /*
+    * Adds to scoreboard based on inputs
+    */
+    public static void addEventOutCome(Connection connec, String oid, String tid, String eid, String pid, String pos) throws SQLException{
+      try {
+       CallableStatement statement = connec.prepareCall("{call proc_add_Event_Outcome(?,?,?,?,?)}");
+
+         statement.setString(1, oid);
+         statement.setString(2, tid);
+         statement.setString(3, eid);
+         statement.setString(4, pid);
+         statement.setString(5, pos);
+
+         statement.execute();
+         statement.close();
+
+     } catch (SQLException ex) {
+       System.out.println("Message = " + ex.getMessage());
+       System.out.println("SQLState = " + ex.getSQLState());
+       System.out.println("SQLState = " + ex.getErrorCode());
+       ex = ex.getNextException();
+     }
+    }
 
 
 /******************************************/

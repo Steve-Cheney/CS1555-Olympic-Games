@@ -16,6 +16,7 @@ DROP procedure proc_create_user;
 DROP procedure proc_drop_user_userid;
 DROP procedure proc_drop_user_usern;
 drop procedure proc_create_event;
+drop procedure proc_add_Event_Outcome;
 
 commit;
 
@@ -47,21 +48,18 @@ create or replace trigger ASSIGN_MEDAL
    BEFORE INSERT OR UPDATE ON SCOREBOARD
     for each row
     BEGIN
-        if :new.position = 1 THEN
-            update SCOREBOARD S
-            set S.MEDAL_ID = 1
-            where :new.position = 1;
-        end if;
-        if :new.position = 2 THEN
-            update SCOREBOARD S
-            set S.MEDAL_ID = 2
-            where :new.position = 2;
-        end if;
-        if :new.position = 3 THEN
-            update SCOREBOARD S
-            set S.MEDAL_ID = 3
-            where :new.position = 3;
-        end if;
+        if :new.medal_ID is null
+           then
+                if :new.position = 1 THEN
+                    :new.MEDAL_ID := 1;
+                end if;
+                if :new.position = 2 THEN
+                    :new.MEDAL_ID := 2;
+                end if;
+                if :new.position = 3 THEN
+                    :new.MEDAL_ID := 3;
+                end if;
+            end if;
     end;
 /
 
@@ -267,11 +265,66 @@ commit;
 CREATE PROCEDURE proc_add_Event_Outcome (oid OLYMPICS.OLYMPIC_ID%type, teamid TEAM.TEAM_ID%type, eid EVENT.EVENT_ID%type,
  pid PARTICIPANT.PARTICIPANT_ID%type, pos SCOREBOARD.POSITION%type)
     AS
+        oidchk number;
+        teamidchk number;
+        eidchk number;
+        pidchk number;
+        teammemchk number;
 
+        oid_dne exception;
+        teamid_dne exception;
+        eid_dne exception;
+        pid_dne exception;
+        notateammem exception;
+    BEGIN
+        select count(*)
+        into oidchk
+        from OLYMPICS
+        where OLYMPIC_ID = oid;
+        if oidchk = 0 then RAISE oid_dne;
+        END IF;
+
+        select count(*)
+        into teamidchk
+        from TEAM
+        where TEAM_ID = oid;
+        if teamidchk = 0 then RAISE teamid_dne;
+        END IF;
+
+        select count(*)
+        into eidchk
+        from EVENT
+        where EVENT_ID = eid;
+        if eidchk = 0 then RAISE eid_dne;
+        END IF;
+
+        select count(*)
+        into pidchk
+        from PARTICIPANT
+        where PARTICIPANT_ID = pid;
+        if pidchk = 0 then RAISE pid_dne;
+        END IF;
+
+        select count(*)
+        into teammemchk
+        from TEAM_MEMBER
+        where TEAM_ID = teamid AND PARTICIPANT_ID = pid;
+        if teammemchk = 0 then RAISE notateammem;
+        END IF;
+
+        INSERT INTO SCOREBOARD(OLYMPIC_ID, EVENT_ID, TEAM_ID, PARTICIPANT_ID, POSITION) values(oid,eid,teamid,pid,pos);
 
         Exception
-            when does_not_exist then
-            raise_application_error(-20005,'User ID does not exist, please try again');
+            when oid_dne then
+                raise_application_error(-20010,'Olympic ID does not exist, please try again');
+            when teamid_dne then
+                raise_application_error(-20011,'Team ID does not exist, please try again');
+            when eid_dne then
+                raise_application_error(-20012,'Event ID does not exist, please try again');
+            when pid_dne then
+                raise_application_error(-20013,'Participant ID does not exist, please try again');
+            when notateammem then
+                raise_application_error(-20014,'Listed Participant is not part of listed Team, please try again');
     END;
 /
 commit;

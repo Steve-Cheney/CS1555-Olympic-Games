@@ -168,8 +168,9 @@ team_id integer not null,
 participant_id integer not null,
 position integer not null,
 medal_id integer,
-CONSTRAINT SCOREBOARD_PK PRIMARY KEY (olympic_id, event_id) INITIALLY DEFERRED DEFERRABLE
-);
+CONSTRAINT SCOREBOARD_PK PRIMARY KEY (olympic_id, event_id,team_id,participant_id) INITIALLY DEFERRED DEFERRABLE
+)
+SEGMENT CREATION IMMEDIATE;
 /
 commit;
 -- CREATING EVENT_PARTICIPATION TABLE
