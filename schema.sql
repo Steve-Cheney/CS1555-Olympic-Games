@@ -26,7 +26,7 @@ passkey varchar2(20) not null, -- When USER is creating Guest account, passkey w
 role_id integer not null,
 last_login date not null,
 CONSTRAINT USER_ACCOUNT_PK PRIMARY KEY (user_id) INITIALLY DEFERRED DEFERRABLE,
-CONSTRAINT USER_ACCOUNT_UN1 UNIQUE(user_id,username) INITIALLY DEFERRED DEFERRABLE,
+CONSTRAINT USER_ACCOUNT_UN1 UNIQUE(user_id,username,role_id) INITIALLY DEFERRED DEFERRABLE, -- may have different account levels with same user/pass
 CONSTRAINT USER_ACCOUNT_UN2 UNIQUE(user_id,username,passkey) INITIALLY DEFERRED DEFERRABLE
 );
 /

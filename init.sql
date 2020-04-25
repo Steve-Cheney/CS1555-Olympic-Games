@@ -81,9 +81,9 @@ INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,4,0,to_date('28-JUL-2012 08:00','dd
 INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,4,1,to_date('28-JUL-2012 10:00','dd-Mon-yyyy hh24:mi'));
 INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,4,4,0,to_date('28-JUL-2012 12:00','dd-Mon-yyyy hh24:mi'));
 INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,4,4,1,to_date('28-JUL-2012 14:00','dd-Mon-yyyy hh24:mi'));
-INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,6,0,to_date('09-AUG-2008 08:00','dd-Mon-yyyy hh24:mi'));
-INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,6,1,to_date('09-AUG-2008 10:00','dd-Mon-yyyy hh24:mi'));
-INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,4,6,0,to_date('09-AUG-2008 12:00','dd-Mon-yyyy hh24:mi'));
+INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,6,0,to_date('09-AUG-2008 08:30','dd-Mon-yyyy hh24:mi'));
+INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,6,1,to_date('09-AUG-2008 10:30','dd-Mon-yyyy hh24:mi'));
+INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,4,6,0,to_date('09-AUG-2008 12:30','dd-Mon-yyyy hh24:mi'));
 INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,4,6,1,to_date('09-AUG-2008 14:00','dd-Mon-yyyy hh24:mi'));
 INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,8,0,to_date('14-AUG-2004 08:00','dd-Mon-yyyy hh24:mi'));
 INSERT INTO EVENT values(SEQ_EVENT.NEXTVAL,3,8,1,to_date('14-AUG-2004 10:00','dd-Mon-yyyy hh24:mi'));
@@ -166,6 +166,11 @@ INSERT INTO TEAM_MEMBER values(1,13);
 INSERT INTO TEAM_MEMBER values(2,14);
 INSERT INTO TEAM_MEMBER values(2,15);
 
-SET CONSTRAINTS ALL IMMEDIATE;
+INSERT INTO USER_ACCOUNT values(SEQ_USER_ACCOUNT.NEXTVAL, 'admin','admin',1,current_timestamp(3));
+INSERT INTO USER_ACCOUNT values(SEQ_USER_ACCOUNT.NEXTVAL, 'user1','GUEST',3,current_timestamp(3));
+INSERT INTO USER_ACCOUNT values(SEQ_USER_ACCOUNT.NEXTVAL, 'user3','worstpass',2,current_timestamp(3));
+INSERT INTO USER_ACCOUNT values(SEQ_USER_ACCOUNT.NEXTVAL, 'user2','badpass',2,current_timestamp(3));
+
+INSERT INTO EVENT_PARTICIPATION values(1,1,'e');
 commit;
 /
